@@ -6,7 +6,7 @@ Authors@R: c(
   person("Christian", "Davenport", email = "christiandavenport@mac.com", role = c("aut")),
   person("Nadiya", "Kostyuk", email = "nadiya@umich.edu", role = c("aut")))
 Description: "This package provides tools to download and merge data files from www.x-sub.org."
-URL: http://x-sub.org
+URL: https://github.com/zhukovyuri/xSub
 Depends: R (>= 3.3.2)
 Imports: countrycode, haven, RCurl
 License: GPL-3
