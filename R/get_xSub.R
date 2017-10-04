@@ -47,11 +47,23 @@ get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,
   file_url <- paste0(url_dir,file_name)
 
   # Download and unzip
-  temp <- tempfile()
-  download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose))
-  xSub_file <- read.csv(unzip(temp, files=file_name))
-  unlink(temp)
-  if(file.exists(file_name)){file.remove(file_name)}
+  if(Sys.info()['sysname']!="Windows"){
+    temp <- tempfile()
+    download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose))
+    xSub_file <- read.csv(unzip(temp, files=file_name))
+    unlink(temp)
+    if(file.exists(file_name)){file.remove(file_name)}
+  }
+  if(Sys.info()['sysname']=="Windows"){
+    temp <- tempfile()
+    # gsub("csv$","RData",file_name)
+    # download.file(file_url,destfile="TEMP.zip")
+    # unz("TEMP.zip")
+    download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose),mode="wb")
+    xSub_file <- read.csv(unzip(temp, files=file_name))
+    unlink(temp)
+    if(file.exists(file_name)){file.remove(file_name)}
+  }
 
   # Add source column
   xSub_file$SOURCE <- data_source[1]
