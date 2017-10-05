@@ -1,11 +1,11 @@
 Package: xSub
 Title: xSub: Cross-National Data on Sub-National Violence
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
   person("Yuri", "Zhukov", email = "zhukov@umich.edu", role = c("cre")),
   person("Christian", "Davenport", email = "christiandavenport@mac.com", role = c("aut")),
   person("Nadiya", "Kostyuk", email = "nadiya@umich.edu", role = c("aut")))
-Description: "This package provides tools to download and merge data files from www.x-sub.org."
+Description: "This package provides tools to download and merge data files on sub-national conflict, violence and protests from www.x-sub.org."
 URL: https://github.com/zhukovyuri/xSub
 Depends: R (>= 3.3.2)
 Imports: countrycode, haven, RCurl

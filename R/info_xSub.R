@@ -6,6 +6,8 @@
 #' @param data_source Subset results by data sources. Character string or vector.
 #' @param country_iso3 Subset results by country codes (ISO3). Character string or vector.
 #' @param country_name Subset results by country name. Character string or vector.
+#' @import haven RCurl countrycode
+#' @importFrom utils data download.file read.csv unzip write.csv globalVariables
 #' @export
 #' @seealso \code{\link{get_xSub}}, \code{\link{get_xSub_multi}}
 #' @examples
@@ -23,8 +25,9 @@
 
 
 info_xSub <- function(details=FALSE,data_source=NULL,country_iso3=NULL,country_name=NULL){
-  # load("xSub_census.RData")
-  data(xSub_census)
+
+  # data(xSub_census)
+
   if(length(data_source)==0&length(country_iso3)==0&length(country_name)==0){
     print(paste0(rep("%%%%",10),collapse=""));print(paste0(rep("%%%%",10),collapse=""))
     print("xSub datasets / by source")

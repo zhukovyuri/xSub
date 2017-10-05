@@ -39,7 +39,7 @@ my_file <- get_xSub_multi(data_source = "GED",country_iso3 = c("EGY","AGO"),
            space_unit = "adm1",time_unit = "year")
 
 # Example with all countries (WARNING: this can take a long time to run)
-my_file <- get_xSub_multi(data_source = "GED",country_iso3 = NULL,
+my_file <- get_xSub_multi(data_source = "BeissingerProtest",country_iso3 = NULL,
            space_unit = "adm0",time_unit = "year")
 }
 \seealso{

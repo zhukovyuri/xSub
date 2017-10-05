@@ -11,6 +11,8 @@
 #' @param write_file Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.
 #' @param write_format Output file format. Can be one of \code{"csv"} (comma-separated values, default), \code{"R"} (RData format, compatible with R statistical programming language), \code{"STATA"} (dta format, compatible with Stata 14).
 #' @param verbose Logical. When \code{verbose=TRUE}, file download progress is printed to console.
+#' @import haven RCurl countrycode
+#' @importFrom utils data download.file read.csv unzip write.csv globalVariables
 #' @export
 #' @seealso \code{\link{info_xSub}}, \code{\link{get_xSub_multi}}
 #' @examples
@@ -27,6 +29,9 @@
 
 get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,time_unit,out_dir=getwd(),write_file=TRUE,write_format="csv",verbose=FALSE){
 
+  # Load dependencies
+  sapply(list("countrycode","haven","RCurl"),function(x){library(x,character.only = TRUE)})
+
   # Units of analysis
   space.agg <- c("adm0","adm1","adm2","priogrid","clea")
   time.agg <- c("year","month","week","day")
@@ -38,7 +43,6 @@ get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,
 
   # Country name
   if(length(country_iso3)==0&length(country_name)>0){
-    list.of.packages <- c("countrycode"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
     country_iso3 <- countrycode::countrycode(country_name,"country.name","iso3c")
   }
 
@@ -78,8 +82,6 @@ get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,
       save(xSub_file,file=paste0(out_dir,"/",gsub("csv$","RData",file_name)))
     }
     if(write_format%in%c("STATA","stata","dta")){
-      # Load (or install) dependencies
-      list.of.packages <- c("haven"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
       write_dta(data=xSub_file,path = paste0(out_dir,"/",gsub("csv$","dta",file_name)),version = 14)
     }
   }

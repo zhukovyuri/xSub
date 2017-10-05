@@ -11,6 +11,8 @@
 #' @param write_file Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.
 #' @param write_format Output file format. Character string. Can be one of \code{"csv"} (comma-separated values, default), \code{"R"} (RData format, compatible with R statistical programming language), \code{"STATA"} (dta format, compatible with Stata 14).
 #' @param verbose Logical. When \code{verbose=TRUE}, file download progress is printed to console..
+#' @import haven RCurl countrycode
+#' @importFrom utils data download.file read.csv unzip write.csv globalVariables
 #' @export
 #' @seealso \code{\link{info_xSub}}, \code{\link{get_xSub}}
 #' @examples
@@ -22,20 +24,22 @@
 #'            space_unit = "adm1",time_unit = "year")
 #'
 #' # Example with all countries (WARNING: this can take a long time to run)
-#' my_file <- get_xSub_multi(data_source = "GED",country_iso3 = NULL,
+#' my_file <- get_xSub_multi(data_source = "BeissingerProtest",country_iso3 = NULL,
 #'            space_unit = "adm0",time_unit = "year")
 
 get_xSub_multi <- function(data_source,country_iso3=NULL,space_unit,time_unit,merge_files=TRUE,out_dir=getwd(),write_file=TRUE,write_format="csv",verbose=FALSE){
 
+  # data(xSub_census)
+
   # Load dependencies
-  list.of.packages <- c("RCurl","countrycode"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
+  sapply(list("countrycode","haven","RCurl"),function(x){library(x,character.only = TRUE)})
 
   print("Assembling file list...")
   # Check which files exist
   url_dir <- "http://cross-sub.org/download/file/"
   if(length(country_iso3)>0){cntz <- country_iso3}
   if(length(country_iso3)==0){
-    cntz <- sort(unique(countrycode_data$iso3c))
+    cntz <- xSub_census$all_countries
   }
   file_urlz <- paste0(url_dir,"xSub_",data_source,"_",cntz,"_",space_unit,"_",time_unit,".csv")
   exist_urlz <- c()
@@ -70,8 +74,6 @@ get_xSub_multi <- function(data_source,country_iso3=NULL,space_unit,time_unit,me
         save(xSub_file,file=paste0(out_dir,"/",gsub("csv$","RData",file_name2)))
       }
       if(write_format%in%c("STATA","stata","dta")){
-        # Load (or install) dependencies
-        list.of.packages <- c("haven"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
         write_dta(data=xSub_file,path = paste0(out_dir,"/",gsub("csv$","dta",file_name2)),version = 14)
       }
     }
