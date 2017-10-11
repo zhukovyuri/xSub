@@ -19,13 +19,21 @@
 #' # Check which countries are available for ACLED
 #' info_xSub(data_source="ACLED")
 #'
-#' # Download ACLED data for Egypt, at province-month level
+#' # Download ACLED data for Egypt, at country-year level
 #' my_file <- get_xSub(data_source = "ACLED",country_iso3 = "EGY",
-#'            space_unit = "adm1",time_unit = "month")
+#'            space_unit = "adm0",time_unit = "year")
+#'
+#' # Download ACLED data for Egypt, at district-month level
+#' \dontrun{
+#' my_file <- get_xSub(data_source = "ACLED",country_iso3 = "EGY",
+#'            space_unit = "adm2",time_unit = "month")
+#' }
 #'
 #' # With country name instead of ISO3 code
+#' \dontrun{
 #' my_file <- get_xSub(data_source = "ACLED",country_name = "Egypt",
-#'            space_unit = "adm1",time_unit = "month")
+#'            space_unit = "adm2",time_unit = "month")
+#' }
 
 get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,time_unit,out_dir=getwd(),write_file=TRUE,write_format="csv",verbose=FALSE){
 

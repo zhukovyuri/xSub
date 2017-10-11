@@ -20,12 +20,16 @@
 #' info_xSub(data_source="GED")
 #'
 #' # Example with two countries
+#' \dontrun{
 #' my_file <- get_xSub_multi(data_source = "GED",country_iso3 = c("EGY","AGO"),
-#'            space_unit = "adm1",time_unit = "year")
+#'            space_unit = "adm1",time_unit = "month")
+#' }
 #'
 #' # Example with all countries (WARNING: this can take a long time to run)
+#' \dontrun{
 #' my_file <- get_xSub_multi(data_source = "BeissingerProtest",country_iso3 = NULL,
 #'            space_unit = "adm0",time_unit = "year")
+#' }
 
 get_xSub_multi <- function(data_source,country_iso3=NULL,space_unit,time_unit,merge_files=TRUE,out_dir=getwd(),write_file=TRUE,write_format="csv",verbose=FALSE){
 
