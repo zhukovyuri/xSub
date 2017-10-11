@@ -7,7 +7,7 @@
 #' @param country_name Country name. See \code{info_xSub()} for full list.
 #' @param space_unit Geographic level of analysis. Character string. Can be one of \code{"adm0"} (country), \code{"adm1"} (province), \code{"adm2"} (district), \code{"priogrid"} (grid cell), \code{"clea"} (electoral constituency). See \code{info_xSub(details=TRUE)} for availability by country.
 #' @param time_unit Temporal level of analysis. Character string. Can be one of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}. See \code{info_xSub(details=TRUE)} for availability by country.
-#' @param out_dir Path to directory where files will be saved.
+#' @param out_dir Path to directory where files will be saved. Character string. Default is R session’s temporary directory, \code{tempdir()}.
 #' @param write_file Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.
 #' @param write_format Output file format. Can be one of \code{"csv"} (comma-separated values, default), \code{"R"} (RData format, compatible with R statistical programming language), \code{"STATA"} (dta format, compatible with Stata 14).
 #' @param verbose Logical. When \code{verbose=TRUE}, file download progress is printed to console.
@@ -35,7 +35,7 @@
 #'            space_unit = "adm2",time_unit = "month")
 #' }
 
-get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,time_unit,out_dir=getwd(),write_file=TRUE,write_format="csv",verbose=FALSE){
+get_xSub <- function(data_source,country_iso3=NULL,country_name=NULL,space_unit,time_unit,out_dir=tempdir(),write_file=TRUE,write_format="csv",verbose=FALSE){
 
   # Load dependencies
   sapply(list("countrycode","haven","RCurl"),function(x){library(x,character.only = TRUE)})

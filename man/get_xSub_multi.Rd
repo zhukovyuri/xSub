@@ -5,7 +5,7 @@
 \title{Get xSub files for multiple countries}
 \usage{
 get_xSub_multi(data_source, country_iso3 = NULL, space_unit, time_unit,
-  merge_files = TRUE, out_dir = getwd(), write_file = TRUE,
+  merge_files = TRUE, out_dir = tempdir(), write_file = TRUE,
   write_format = "csv", verbose = FALSE)
 }
 \arguments{
@@ -19,7 +19,7 @@ get_xSub_multi(data_source, country_iso3 = NULL, space_unit, time_unit,
 
 \item{merge_files}{Logical. If \code{merge_files=TRUE} (default), function will combine individual country files into single data.frame, and write single file to disk. If \code{merge_files=FALSE}, function produces a list, and writes individual country files to disk separately.}
 
-\item{out_dir}{Path to directory where files will be saved. Character string.}
+\item{out_dir}{Path to directory where files will be saved. Character string. Default is R session’s temporary directory, \code{tempdir()}.}
 
 \item{write_file}{Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.}
 

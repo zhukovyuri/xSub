@@ -7,7 +7,7 @@
 #' @param space_unit Geographic level of analysis. Character string. Can be one of \code{"adm0"} (country), \code{"adm1"} (province), \code{"adm2"} (district), \code{"priogrid"} (grid cell), \code{"clea"} (electoral constituency). See \code{info_xSub(details=TRUE)} for availability by country.
 #' @param time_unit Temporal level of analysis. Character string. Can be one of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}. See \code{info_xSub(details=TRUE)} for availability by country.
 #' @param merge_files Logical. If \code{merge_files=TRUE} (default), function will combine individual country files into single data.frame, and write single file to disk. If \code{merge_files=FALSE}, function produces a list, and writes individual country files to disk separately.
-#' @param out_dir Path to directory where files will be saved. Character string.
+#' @param out_dir Path to directory where files will be saved. Character string. Default is R session’s temporary directory, \code{tempdir()}.
 #' @param write_file Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.
 #' @param write_format Output file format. Character string. Can be one of \code{"csv"} (comma-separated values, default), \code{"R"} (RData format, compatible with R statistical programming language), \code{"STATA"} (dta format, compatible with Stata 14).
 #' @param verbose Logical. When \code{verbose=TRUE}, file download progress is printed to console..
@@ -31,7 +31,7 @@
 #'            space_unit = "adm0",time_unit = "year")
 #' }
 
-get_xSub_multi <- function(data_source,country_iso3=NULL,space_unit,time_unit,merge_files=TRUE,out_dir=getwd(),write_file=TRUE,write_format="csv",verbose=FALSE){
+get_xSub_multi <- function(data_source,country_iso3=NULL,space_unit,time_unit,merge_files=TRUE,out_dir=tempdir(),write_file=TRUE,write_format="csv",verbose=FALSE){
 
   # data(xSub_census)
 

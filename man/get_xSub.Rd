@@ -5,7 +5,7 @@
 \title{Get xSub file}
 \usage{
 get_xSub(data_source, country_iso3 = NULL, country_name = NULL, space_unit,
-  time_unit, out_dir = getwd(), write_file = TRUE, write_format = "csv",
+  time_unit, out_dir = tempdir(), write_file = TRUE, write_format = "csv",
   verbose = FALSE)
 }
 \arguments{
@@ -19,7 +19,7 @@ get_xSub(data_source, country_iso3 = NULL, country_name = NULL, space_unit,
 
 \item{time_unit}{Temporal level of analysis. Character string. Can be one of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}. See \code{info_xSub(details=TRUE)} for availability by country.}
 
-\item{out_dir}{Path to directory where files will be saved.}
+\item{out_dir}{Path to directory where files will be saved. Character string. Default is R session’s temporary directory, \code{tempdir()}.}
 
 \item{write_file}{Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.}
 
