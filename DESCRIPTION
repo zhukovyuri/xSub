@@ -1,6 +1,6 @@
 Package: xSub
 Title: Cross-National Data on Sub-National Violence
-Version: 0.0.1
+Version: 2.0.1
 Authors@R: c(
   person("Yuri", "Zhukov", email = "zhukov@umich.edu", role = c("cre")),
   person("Christian", "Davenport", email = "christiandavenport@mac.com", role = c("aut")),
