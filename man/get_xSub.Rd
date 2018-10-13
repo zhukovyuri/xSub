@@ -4,12 +4,18 @@
 \alias{get_xSub}
 \title{Get xSub file}
 \usage{
-get_xSub(data_source, country_iso3 = NULL, country_name = NULL, space_unit,
-  time_unit, out_dir = tempdir(), write_file = TRUE, write_format = "csv",
-  verbose = FALSE)
+get_xSub(data_source, sources_type = "individual",
+  data_type = "spatial panel", country_iso3 = NULL, country_name = NULL,
+  space_unit, time_unit, geo_window = "1 km", time_window = "1 day",
+  dyad_type = "undirected", out_dir = getwd(), write_file = TRUE,
+  write_format = "csv", verbose = FALSE)
 }
 \arguments{
 \item{data_source}{Name of data source. See \code{info_xSub()} for full list.}
+
+\item{sources_type}{Type of data sources ("individual" or "multiple"). Character string.}
+
+\item{data_type}{Type of dataset ("event" or "panel"). Character string.}
 
 \item{country_iso3}{Country code (ISO3). See \code{info_xSub()} for full list.}
 
@@ -19,7 +25,13 @@ get_xSub(data_source, country_iso3 = NULL, country_name = NULL, space_unit,
 
 \item{time_unit}{Temporal level of analysis. Character string. Can be one of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}. See \code{info_xSub(details=TRUE)} for availability by country.}
 
-\item{out_dir}{Path to directory where files will be saved. Character string. Default is R session’s temporary directory, \code{tempdir()}.}
+\item{geo_window}{Geographic window (if source_type="multiple"). Could be either of "1 km" (default) or "5 km". Character string or vector.}
+
+\item{time_window}{Time window (if source_type="multiple"). Could be either of "1 day" (default) or "2 day". Character string or vector.}
+
+\item{dyad_type}{Time window (if source_type="multiple"). Could be either of "undirected" (default) or "directed". Character string or vector.}
+
+\item{out_dir}{Path to directory where files will be saved.}
 
 \item{write_file}{Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.}
 
@@ -48,6 +60,19 @@ my_file <- get_xSub(data_source = "ACLED",country_iso3 = "EGY",
 \dontrun{
 my_file <- get_xSub(data_source = "ACLED",country_name = "Egypt",
            space_unit = "adm2",time_unit = "month")
+}
+
+\dontrun{
+# Download ACLED data for Egypt, event level
+my_file <- get_xSub(data_source = "ACLED",country_iso3 = "EGY",
+           data_type = "event")
+}
+
+\dontrun{
+# Download multiple source data for Egypt, at province-month level
+my_file <- get_xSub(sources_type = "multiple",country_iso3 = "EGY",
+           space_unit = "adm1",time_unit = "month",
+           geo_window = "1 km", time_window = "1 day", dyad_type = "undirected")
 }
 }
 \seealso{
