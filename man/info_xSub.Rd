@@ -4,17 +4,29 @@
 \alias{info_xSub}
 \title{Information on available xSub files}
 \usage{
-info_xSub(details = FALSE, data_source = NULL, country_iso3 = NULL,
-  country_name = NULL)
+info_xSub(details = FALSE, sources_type = "individual",
+  data_type = "panel", data_source = NULL, country_iso3 = NULL,
+  country_name = NULL, geo_window = NULL, time_window = NULL,
+  dyad_type = NULL)
 }
 \arguments{
 \item{details}{Logical. If \code{details=TRUE}, function returns information on available units of analysis for each country.}
+
+\item{sources_type}{Type of data sources ("individual" or "multiple"). Character string.}
+
+\item{data_type}{Type of dataset ("event" or "panel"). Character string.}
 
 \item{data_source}{Subset results by data sources. Character string or vector.}
 
 \item{country_iso3}{Subset results by country codes (ISO3). Character string or vector.}
 
 \item{country_name}{Subset results by country name. Character string or vector.}
+
+\item{geo_window}{Geographic window (if source_type="multiple"). Could be either of "1 km" or "5 km". Character string or vector.}
+
+\item{time_window}{Time window (if source_type="multiple"). Could be either of "1 day" or "2 day". Character string or vector.}
+
+\item{dyad_type}{Time window (if source_type="multiple"). Could be either of "undirected" or "directed". Character string or vector.}
 }
 \description{
 This function reports the availability of files on the \code{www.x-sub.org} server, and corresponding country codes and units of analysis. For additional info, see \code{www.x-sub.org/about/what-is-xsub}.
@@ -31,6 +43,15 @@ info_xSub(details=TRUE,country_name = "Pakistan")
 
 # Available files for SCAD data source
 info_xSub(data_source = "SCAD")
+
+# Available files for SCAD data source, event-level
+info_xSub(data_source = "SCAD", data_type = "event")
+
+# Multiple data sources, directed dyads
+info_xSub(sources_type = "multiple", dyad_type = "directed")
+
+# Multiple data sources, directed dyads, Russia
+info_xSub(sources_type = "multiple", dyad_type = "directed", country_name = "Russia")
 }
 \seealso{
 \code{\link{get_xSub}}, \code{\link{get_xSub_multi}}

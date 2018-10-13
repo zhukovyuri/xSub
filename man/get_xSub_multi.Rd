@@ -4,12 +4,18 @@
 \alias{get_xSub_multi}
 \title{Get xSub files for multiple countries}
 \usage{
-get_xSub_multi(data_source, country_iso3 = NULL, space_unit, time_unit,
-  merge_files = TRUE, out_dir = tempdir(), write_file = TRUE,
+get_xSub_multi(data_source, sources_type = "individual",
+  data_type = "spatial panel", country_iso3 = NULL, space_unit, time_unit,
+  geo_window = "1 km", time_window = "1 day", dyad_type = "undirected",
+  merge_files = TRUE, out_dir = getwd(), write_file = FALSE,
   write_format = "csv", verbose = FALSE)
 }
 \arguments{
 \item{data_source}{Name of data source. Character string. See \code{info_xSub()} for full list.}
+
+\item{sources_type}{Type of data sources ("individual" or "multiple"). Character string.}
+
+\item{data_type}{Type of dataset ("event" or "panel"). Character string.}
 
 \item{country_iso3}{Country codes (ISO3). Character string or vector. See \code{info_xSub()} for full list. If left blank, function will download all available countries for selected data source.}
 
@@ -17,9 +23,15 @@ get_xSub_multi(data_source, country_iso3 = NULL, space_unit, time_unit,
 
 \item{time_unit}{Temporal level of analysis. Character string. Can be one of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}. See \code{info_xSub(details=TRUE)} for availability by country.}
 
+\item{geo_window}{Geographic window (if source_type="multiple"). Could be either of "1 km" or "5 km". Character string or vector.}
+
+\item{time_window}{Time window (if source_type="multiple"). Could be either of "1 day" or "2 day". Character string or vector.}
+
+\item{dyad_type}{Time window (if source_type="multiple"). Could be either of "undirected" or "directed". Character string or vector.}
+
 \item{merge_files}{Logical. If \code{merge_files=TRUE} (default), function will combine individual country files into single data.frame, and write single file to disk. If \code{merge_files=FALSE}, function produces a list, and writes individual country files to disk separately.}
 
-\item{out_dir}{Path to directory where files will be saved. Character string. Default is R session’s temporary directory, \code{tempdir()}.}
+\item{out_dir}{Path to directory where files will be saved. Character string.}
 
 \item{write_file}{Logical. If \code{write_file=TRUE}, selected file will be written to disk, at location specified by \code{out_dir}.}
 
@@ -35,9 +47,18 @@ This function downloads and merges mutiple country files from \code{www.x-sub.or
 info_xSub(data_source="GED")
 
 # Example with two countries
+my_file <- get_xSub_multi(data_source = "PITF",country_iso3 = c("ALB","ARM"),
+           space_unit = "adm0",time_unit = "year")
+
+# Example with two countries
 \dontrun{
 my_file <- get_xSub_multi(data_source = "GED",country_iso3 = c("EGY","AGO"),
            space_unit = "adm1",time_unit = "month")
+}
+
+# Example with two countries, multiple sources, event-level
+\dontrun{
+my_file <- get_xSub_multi(sources_type = "multiple",data_type="event",country_iso3 = c("EGY","AGO"))
 }
 
 # Example with all countries (WARNING: this can take a long time to run)
@@ -47,5 +68,7 @@ my_file <- get_xSub_multi(data_source = "BeissingerProtest",country_iso3 = NULL,
 }
 }
 \seealso{
+\code{\link{info_xSub}}, \code{\link{get_xSub}}
+
 \code{\link{info_xSub}}, \code{\link{get_xSub}}
 }
