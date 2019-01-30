@@ -49,8 +49,8 @@
 #' \dontrun{
 #' # Download multiple source data for Egypt, at province-month level
 #' my_file <- get_xSub(sources_type = "multiple",country_iso3 = "EGY",
-#'            space_unit = "adm1",time_unit = "month",
-#'            geo_window = "1 km", time_window = "1 day", dyad_type = "undirected")
+#'            space_unit = "adm1",time_unit = "month", geo_window = "1 km", 
+#'            time_window = "1 day", dyad_type = "undirected")
 #'}
 
 get_xSub <- function(data_source,sources_type="individual",data_type="spatial panel",
@@ -111,6 +111,11 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
     }
   }
 
+
+  # Error handling
+  downloadFail <- FALSE
+  tryCatch({
+
   # Download and unzip
   if(Sys.info()['sysname']!="Windows"){
     temp <- tempfile()
@@ -129,6 +134,20 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
     unlink(temp)
     if(file.exists(file_name)){file.remove(file_name)}
   }
+
+
+  }, warning = function(w) {
+    downloadFail <<- TRUE
+  }, error = function(e) {
+    message("Cannot access xSub server. Please check your internet connection and try again.")
+    downloadFail <<- TRUE
+  }, finally = {
+  })
+  
+  if(downloadFail){
+    cat("Cannot access xSub server. Please check your internet connection and try again.")
+    return()
+  } else {
 
   # Add source column
   if(length(xSub_file$SOURCE)==0){
@@ -153,5 +172,7 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
 
   # Return object
   return(xSub_file)
+
+}
 
 }

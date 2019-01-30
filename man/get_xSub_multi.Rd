@@ -5,10 +5,10 @@
 \title{Get xSub files for multiple countries}
 \usage{
 get_xSub_multi(data_source, sources_type = "individual",
-  data_type = "spatial panel", country_iso3 = NULL, space_unit, time_unit,
-  geo_window = "1 km", time_window = "1 day", dyad_type = "undirected",
-  merge_files = TRUE, out_dir = getwd(), write_file = FALSE,
-  write_format = "csv", verbose = FALSE)
+  data_type = "spatial panel", country_iso3 = NULL, space_unit,
+  time_unit, geo_window = "1 km", time_window = "1 day",
+  dyad_type = "undirected", merge_files = TRUE, out_dir = getwd(),
+  write_file = FALSE, write_format = "csv", verbose = FALSE)
 }
 \arguments{
 \item{data_source}{Name of data source. Character string. See \code{info_xSub()} for full list.}

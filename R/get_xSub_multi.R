@@ -100,11 +100,25 @@ get_xSub_multi <- function(data_source,sources_type="individual",data_type="spat
   exist_urlz <- c()
   for (n in seq_along(file_urlz)){
     z <- ""
-    try(z <- getBinaryURL(file_urlz[n], failonerror = TRUE))
+    # try(z <- getBinaryURL(file_urlz[n], failonerror = TRUE))
+
+    tryCatch({
+      z <- getBinaryURL(file_urlz[n], failonerror = TRUE)
+    }, warning = function(w) {
+      message(paste0("Country ",n,": Cannot access xSub server. Please check your internet connection and try again."))
+      z <<- ""
+    }, error = function(e) {
+      message(paste0("Country ",n,": Cannot access xSub server. Please check your internet connection and try again."))
+      z <<- ""
+    }, finally = {
+    })
+
     if(length(z) > 1){exist_urlz[n] <- TRUE}
     else{exist_urlz[n] <- FALSE}
   }
   country_iso3 <- cntz[exist_urlz]
+
+  if(length(country_iso3)>0){
 
   # Loop
   print("Downloading files...")
@@ -148,6 +162,7 @@ get_xSub_multi <- function(data_source,sources_type="individual",data_type="spat
   else(
     return(xSub_list)
   )
-
+  }
+  else {return()}
 
 }
