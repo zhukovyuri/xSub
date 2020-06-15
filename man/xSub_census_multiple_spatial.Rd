@@ -3,8 +3,9 @@
 \docType{data}
 \name{xSub_census_multiple_spatial}
 \alias{xSub_census_multiple_spatial}
-\title{Census of multiple-source panel datasets in xSub (updated October 13, 2018)}
-\format{A list with 6 elements:
+\title{Census of multiple-source panel datasets in xSub (updated June 15, 2020)}
+\format{
+A list with 6 elements:
 \describe{
   \item{level0_bysource}{Countries organized by \code{data_source}. List object, where each sub-entry is also a list, containing entries for \code{data_source},\code{geo_window},\code{time_window},\code{dyad_type},\code{country_iso3},\code{country_name}.}
   \item{level0_bycountry}{Data sources organized by country. List of data.frames, where each row is a country, with columns for \code{country_iso3},\code{country_name},\code{geo_window},\code{time_window},\code{dyad_type},\code{data_sources}.}
@@ -12,7 +13,8 @@
   \item{level2}{Detailed information on data sources, countries, spatial and temporal levels of analysis. data.frame, where each row is a source-country-spatial unit combination, with columns for \code{data_source},\code{geo_window},\code{time_window},\code{dyad_type},\code{country_iso3},\code{country_name},\code{space_unit},\code{time_units}.}
   \item{level3}{File census. data.frame, where each row is a single file, with columns for \code{file_name},\code{data_source},\code{geo_window},\code{time_window},\code{dyad_type},\code{country_iso3},\code{country_name},\code{space_unit},\code{time_unit}.}
   \item{all_countries}{Vector of all country ISO3 codes. Used by \code{get_xSub_multi}.}
-}}
+}
+}
 \source{
 \url{http://www.x-sub.org/}
 }

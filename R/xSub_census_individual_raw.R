@@ -1,4 +1,4 @@
-#' Census of individual-source event-level datasets in xSub (updated October 13, 2018)
+#' Census of individual-source event-level datasets in xSub (updated June 15, 2020)
 #'
 #' A list of data sources and countries available for download. Used by \code{info_xSub()}
 #'

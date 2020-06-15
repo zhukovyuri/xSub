@@ -4,10 +4,17 @@
 \alias{info_xSub}
 \title{Information on available xSub files}
 \usage{
-info_xSub(details = FALSE, sources_type = "individual",
-  data_type = "panel", data_source = NULL, country_iso3 = NULL,
-  country_name = NULL, geo_window = NULL, time_window = NULL,
-  dyad_type = NULL)
+info_xSub(
+  details = FALSE,
+  sources_type = "individual",
+  data_type = "panel",
+  data_source = NULL,
+  country_iso3 = NULL,
+  country_name = NULL,
+  geo_window = NULL,
+  time_window = NULL,
+  dyad_type = NULL
+)
 }
 \arguments{
 \item{details}{Logical. If \code{details=TRUE}, function returns information on available units of analysis for each country.}

@@ -18,7 +18,6 @@
 #' @param verbose Logical. When \code{verbose=TRUE}, file download progress is printed to console..
 #' @export
 #' @seealso \code{\link{info_xSub}}, \code{\link{get_xSub}}
-#' @examples
 #' @import haven RCurl countrycode
 #' @importFrom utils data download.file read.csv unzip write.csv globalVariables
 #' @export
@@ -63,7 +62,7 @@ get_xSub_multi <- function(data_source,sources_type="individual",data_type="spat
   url_dir <- "http://cross-sub.org/api/data/"
   if(length(country_iso3)>0){cntz <- country_iso3}
   if(length(country_iso3)==0){
-    cntz <- sort(unique(countrycode_data$iso3c))
+    cntz <- sort(unique(countrycode::codelist$iso3c))
   }
 
   if((grepl("^i|^I",sources_type)&grepl("^s|^S|^p|^P",data_type))){
@@ -99,16 +98,20 @@ get_xSub_multi <- function(data_source,sources_type="individual",data_type="spat
 
   exist_urlz <- c()
   for (n in seq_along(file_urlz)){
+    e <- NULL
+    w <- NULL
     z <- ""
-    # try(z <- getBinaryURL(file_urlz[n], failonerror = TRUE))
-
     tryCatch({
-      z <- getBinaryURL(file_urlz[n], failonerror = TRUE)
+      z <- RCurl::getBinaryURL(file_urlz[n], failonerror = TRUE)
     }, warning = function(w) {
-      message(paste0("Country ",n,": Cannot access xSub server. Please check your internet connection and try again."))
+      if(grepl("Could not resolve host",w)){message("Cannot access xSub server. Please check your internet connection and try again.")}
+      if(grepl("404 Not Found",w)){message(paste0("Country ",n," (",cntz[n],") unavailable from source ",data_source,". Looking for the rest..."))}
+      if(!grepl("404 Not Found",w)&!grepl("Could not resolve host",w)){message(paste0("Country ",n," (",cntz[n],"): ",w))}
       z <<- ""
     }, error = function(e) {
-      message(paste0("Country ",n,": Cannot access xSub server. Please check your internet connection and try again."))
+      if(grepl("Could not resolve host",e)){message("Cannot access xSub server. Please check your internet connection and try again.")}
+      if(grepl("404 Not Found",e)){message(paste0("Country ",n," (",cntz[n],") unavailable from source ",data_source,". Looking for the rest..."))}
+      if(!grepl("404 Not Found",e)&!grepl("Could not resolve host",e)){message(paste0("Country ",n," (",cntz[n],"): ",e))}
       z <<- ""
     }, finally = {
     })
@@ -120,48 +123,48 @@ get_xSub_multi <- function(data_source,sources_type="individual",data_type="spat
 
   if(length(country_iso3)>0){
 
-  # Loop
-  print("Downloading files...")
-  xSub_list <- lapply(seq_along(country_iso3),function(j){
-    get_xSub(data_source = data_source,data_type = data_type,country_iso3 = country_iso3[j],space_unit = space_unit,time_unit = time_unit,out_dir = out_dir,write_file = (!merge_files),write_format = write_format,verbose = verbose)
-  })
+    # Loop
+    print("Downloading files...")
+    xSub_list <- lapply(seq_along(country_iso3),function(j){
+      get_xSub(data_source = data_source,data_type = data_type,country_iso3 = country_iso3[j],space_unit = space_unit,time_unit = time_unit,out_dir = out_dir,write_file = (!merge_files),write_format = write_format,verbose = verbose)
+    })
 
 
-  # Merge
-  if(merge_files){
-    print("Merging files...")
-    xSub_file <- do.call(rbind,xSub_list)
+    # Merge
+    if(merge_files){
+      print("Merging files...")
+      xSub_file <- do.call(rbind,xSub_list)
 
-    # Write file
-    if(write_file){
-      print("Writing to disk...")
+      # Write file
+      if(write_file){
+        print("Writing to disk...")
 
-      if(grepl("^s|^S|^p|^P",data_type)){
-      file_name2 <- paste0("xSub_",data_source,"_",space_unit,"_",time_unit,".csv")
-      }
-      if(grepl("^e|^E",data_type)){
-        file_name2 <- paste0("xSub_",data_source,"_event.csv")
+        if(grepl("^s|^S|^p|^P",data_type)){
+          file_name2 <- paste0("xSub_",data_source,"_",space_unit,"_",time_unit,".csv")
+        }
+        if(grepl("^e|^E",data_type)){
+          file_name2 <- paste0("xSub_",data_source,"_event.csv")
+        }
+
+        if(write_format=="csv"){
+          write.csv(xSub_file,file=paste0(out_dir,"/",file_name2),fileEncoding = "UTF-8",row.names = FALSE)
+        }
+        if(write_format%in%c("R","RData")){
+          save(xSub_file,file=paste0(out_dir,"/",gsub("csv$","RData",file_name2)))
+        }
+        if(write_format%in%c("STATA","stata","dta")){
+          # Load (or install) dependencies
+          # list.of.packages <- c("haven"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
+          write_dta(data=xSub_file,path = paste0(out_dir,"/",gsub("csv$","dta",file_name2)),version = 14)
+        }
       }
 
-      if(write_format=="csv"){
-        write.csv(xSub_file,file=paste0(out_dir,"/",file_name2),fileEncoding = "UTF-8",row.names = FALSE)
-      }
-      if(write_format%in%c("R","RData")){
-        save(xSub_file,file=paste0(out_dir,"/",gsub("csv$","RData",file_name2)))
-      }
-      if(write_format%in%c("STATA","stata","dta")){
-        # Load (or install) dependencies
-        # list.of.packages <- c("haven"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
-        write_dta(data=xSub_file,path = paste0(out_dir,"/",gsub("csv$","dta",file_name2)),version = 14)
-      }
+      # Return object
+      return(xSub_file)
     }
-
-    # Return object
-    return(xSub_file)
-  }
-  else(
-    return(xSub_list)
-  )
+    else(
+      return(xSub_list)
+    )
   }
   else {return()}
 

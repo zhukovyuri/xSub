@@ -1,6 +1,6 @@
 Package: xSub
 Title: Cross-National Data on Sub-National Violence
-Version: 2.0.2
+Version: 3.0.1
 Authors@R: c(
   person("Yuri", "Zhukov", email = "zhukov@umich.edu", role = c("cre")),
   person("Christian", "Davenport", email = "christiandavenport@mac.com", role = c("aut")),
@@ -12,4 +12,4 @@ Imports: countrycode, haven, RCurl
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
