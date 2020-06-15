@@ -2,7 +2,7 @@ Package: xSub
 Title: Cross-National Data on Sub-National Violence
 Version: 3.0.1
 Authors@R: c(
-  person("Yuri", "Zhukov", email = "zhukov@umich.edu", role = c("cre")),
+  person("Yuri", "Zhukov", email = "zhukov@umich.edu", role = c("aut","cre")),
   person("Christian", "Davenport", email = "christiandavenport@mac.com", role = c("aut")),
   person("Nadiya", "Kostyuk", email = "nadiya@umich.edu", role = c("aut")))
 Description: Tools to download and merge data files on sub-national conflict, violence and protests from <http://www.x-sub.org>.

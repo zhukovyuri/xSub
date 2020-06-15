@@ -58,8 +58,10 @@ This function downloads and merges mutiple country files from \code{www.x-sub.or
 info_xSub(data_source="GED")
 
 # Example with two countries
+\dontrun{
 my_file <- get_xSub_multi(data_source = "PITF",country_iso3 = c("ALB","ARM"),
            space_unit = "adm0",time_unit = "year")
+}
 
 # Example with two countries
 \dontrun{
