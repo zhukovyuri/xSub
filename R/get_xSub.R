@@ -71,19 +71,20 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
 
   # Country name
   if(length(country_iso3)==0&length(country_name)>0){
-    # list.of.packages <- c("countrycode"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
     country_iso3 <- countrycode::countrycode(country_name,"country.name","iso3c")
   }
 
   # File name
   if((grepl("^i|^I",sources_type)&grepl("^s|^S|^p|^P",data_type))){
     file_name <- paste0("xSub_",data_source,"_",country_iso3,"_",space_unit,"_",time_unit,".csv")
+    file_name_ <- file_name
     zip_name <- paste0("xSub_",data_source,"_",country_iso3,"_",space_unit,"_",time_unit,".zip")
     file_url <- paste0(url_dir,zip_name)
   }
   if(!(grepl("^i|^I",sources_type)&grepl("^s|^S|^p|^P",data_type))){
     if((grepl("^i|^I",sources_type)&grepl("^e|^E",data_type))){
-      file_name <- paste0("xSub_",data_source,"_",country_iso3,"_event.csv")
+      file_name <- paste0("xSub_",data_source,"_Events_",country_iso3,".csv")
+      file_name_ <- paste0("xSub_",data_source,"_",country_iso3,"_event.csv")
       zip_name <- paste0("xSub_",data_source,"_",country_iso3,"_event.zip")
       file_url <- paste0(url_dir,zip_name)
     }
@@ -94,7 +95,8 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
         twz <- ifelse(grepl("^1",time_window),"1d",ifelse(grepl("^2",time_window),"2d",stop("time_window can only be \"1 day\" or \"2 day\"")))
         dyz <- ifelse(grepl("^u|^U",dyad_type),"B",ifelse(grepl("^d|^D",dyad_type),"A",stop("dyad_type can only be \"undirected\" or \"directed\"")))
         data_source <- paste0("MELTT",gwz,twz,dyz)
-        file_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_event.csv")
+        file_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_Events_",country_iso3,".csv")
+        file_name_ <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_event.csv")
         zip_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_event.zip")
         file_url <- paste0(url_dir,zip_name)
       }
@@ -102,14 +104,15 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
     if((grepl("^m|^M",sources_type)&grepl("^s|^S|^p|^P",data_type))){
       if(length(geo_window)==0|length(time_window)==0|length(dyad_type)==0){stop('Please specify geo_window (\"1 km\" or \"5 km\"), time_window (\"1 day\" or \"2 day\") and dyad_type (\"undirected\" or \"directed\").')}
       if(length(geo_window)>0&length(time_window)>0&length(dyad_type)>0){
-          gwz <- ifelse(grepl("^1",geo_window),"1km",ifelse(grepl("^5",geo_window),"5km",stop("geo_window can only be \"1 km\" or \"5 km\"")))
-          twz <- ifelse(grepl("^1",time_window),"1d",ifelse(grepl("^2",time_window),"2d",stop("time_window can only be \"1 day\" or \"2 day\"")))
-          dyz <- ifelse(grepl("^u|^U",dyad_type),"B",ifelse(grepl("^d|^D",dyad_type),"A",stop("dyad_type can only be \"undirected\" or \"directed\"")))
-          data_source <- paste0("MELTT",gwz,twz,dyz)
-          file_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_",space_unit,"_",time_unit,".csv")
-          zip_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_",space_unit,"_",time_unit,".zip")
-          file_url <- paste0(url_dir,zip_name)
-        }
+        gwz <- ifelse(grepl("^1",geo_window),"1km",ifelse(grepl("^5",geo_window),"5km",stop("geo_window can only be \"1 km\" or \"5 km\"")))
+        twz <- ifelse(grepl("^1",time_window),"1d",ifelse(grepl("^2",time_window),"2d",stop("time_window can only be \"1 day\" or \"2 day\"")))
+        dyz <- ifelse(grepl("^u|^U",dyad_type),"B",ifelse(grepl("^d|^D",dyad_type),"A",stop("dyad_type can only be \"undirected\" or \"directed\"")))
+        data_source <- paste0("MELTT",gwz,twz,dyz)
+        file_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_",space_unit,"_",time_unit,".csv")
+        file_name_ <- file_name
+        zip_name <- paste0("xSub_MELTT",gwz,twz,dyz,"_",country_iso3,"_",space_unit,"_",time_unit,".zip")
+        file_url <- paste0(url_dir,zip_name)
+      }
     }
   }
 
@@ -118,24 +121,24 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
   downloadFail <- FALSE
   tryCatch({
 
-  # Download and unzip
-  if(Sys.info()['sysname']!="Windows"){
-    temp <- tempfile()
-    download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose))
-    xSub_file <- read.csv(unzip(temp, files=file_name))
-    unlink(temp)
-    if(file.exists(file_name)){file.remove(file_name)}
-  }
-  if(Sys.info()['sysname']=="Windows"){
-    temp <- tempfile()
-    # gsub("csv$","RData",file_name)
-    # download.file(file_url,destfile="TEMP.zip")
-    # unz("TEMP.zip")
-    download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose),mode="wb")
-    xSub_file <- read.csv(unzip(temp, files=file_name))
-    unlink(temp)
-    if(file.exists(file_name)){file.remove(file_name)}
-  }
+    # Download and unzip
+    if(Sys.info()['sysname']!="Windows"){
+      temp <- tempfile()
+      download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose))
+      xSub_file <- read.csv(unzip(temp, files=file_name))
+      unlink(temp)
+      if(file.exists(file_name)){file.remove(file_name)}
+    }
+    if(Sys.info()['sysname']=="Windows"){
+      temp <- tempfile()
+      # gsub("csv$","RData",file_name)
+      # download.file(file_url,destfile="TEMP.zip")
+      # unz("TEMP.zip")
+      download.file(file_url,temp,cacheOK = TRUE,quiet = (!verbose),mode="wb")
+      xSub_file <- read.csv(unzip(temp, files=file_name))
+      unlink(temp)
+      if(file.exists(file_name)){file.remove(file_name)}
+    }
 
 
   }, warning = function(w) {
@@ -151,30 +154,28 @@ get_xSub <- function(data_source,sources_type="individual",data_type="spatial pa
     return()
   } else {
 
-  # Add source column
-  if(length(xSub_file$SOURCE)==0){
-    xSub_file$SOURCE <- data_source[1]
-    xSub_file <- xSub_file[,c(ncol(xSub_file),1:(ncol(xSub_file)-1))]
+    # Add source column
+    if(length(xSub_file$SOURCE)==0){
+      xSub_file$SOURCE <- data_source[1]
+      xSub_file <- xSub_file[,c(ncol(xSub_file),1:(ncol(xSub_file)-1))]
+    }
+
+    # Write file
+    if(write_file){
+      if(write_format=="csv"){
+        write.csv(xSub_file,file=paste0(out_dir,"/",file_name_),fileEncoding = "UTF-8",row.names = FALSE)
+      }
+      if(write_format%in%c("R","RData")){
+        save(xSub_file,file=paste0(out_dir,"/",gsub("csv$","RData",file_name_)))
+      }
+      if(write_format%in%c("STATA","stata","dta")){
+        haven::write_dta(data=xSub_file,path = paste0(out_dir,"/",gsub("csv$","dta",file_name_)),version = 14)
+      }
+    }
+
+    # Return object
+    return(xSub_file)
+
   }
-
-  # Write file
-  if(write_file){
-    if(write_format=="csv"){
-      write.csv(xSub_file,file=paste0(out_dir,"/",file_name),fileEncoding = "UTF-8",row.names = FALSE)
-    }
-    if(write_format%in%c("R","RData")){
-      save(xSub_file,file=paste0(out_dir,"/",gsub("csv$","RData",file_name)))
-    }
-    if(write_format%in%c("STATA","stata","dta")){
-      # Load (or install) dependencies
-      # list.of.packages <- c("haven"); new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]; if(length(new.packages)){install.packages(new.packages,dependencies=TRUE)}; lapply(list.of.packages, require, character.only = TRUE)
-      write_dta(data=xSub_file,path = paste0(out_dir,"/",gsub("csv$","dta",file_name)),version = 14)
-    }
-  }
-
-  # Return object
-  return(xSub_file)
-
-}
 
 }
